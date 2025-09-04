@@ -16,11 +16,11 @@ def check_health(domain):
     try:
         response = requests.get(domain, timeout=TIMEOUT)
         if response.status_code == 200:
-            return True, f"Domain {domain} is healthy."
+            return True, f"{domain} is healthy."
         else:
-            return False, f"Domain {domain} returned status code {response.status_code}."
+            return False, f"{domain} returned status code {response.status_code}."
     except requests.RequestException as e:
-        return False, f"Domain {domain} is unreachable. Error: {e}"
+        return False, f"{domain} is unreachable. Error: {e}"
     
 def main():
     results = []
