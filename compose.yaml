@@ -1,0 +1,12 @@
+services:
+
+  health-check-api:
+    container_name: health-check-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./utils/templates/:/app/utils/templates
+    restart: on-failure
