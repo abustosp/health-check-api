@@ -8,13 +8,13 @@ except ImportError:
     print("python-dotenv no está instalado, no se cargarán las variables de entorno, salvo que se usen en el .env.")
 
 DOMAINS = os.getenv("DOMAINS", "").split(";")
-TIMEOUT = int(os.getenv("TIMEOUT", 10))
+TIMEOUT_REQUEST = int(os.getenv("TIMEOUT_REQUEST", 30))
 RECEPTORES = os.getenv("RECEPTORES", "").split(";")
 
 def check_health(domain):
     
     try:
-        response = requests.get(domain, timeout=TIMEOUT)
+        response = requests.get(domain, timeout=TIMEOUT_REQUEST)
         if response.status_code == 200:
             return True, f"{domain} está saludable."
         else:
