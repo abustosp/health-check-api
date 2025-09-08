@@ -7,7 +7,7 @@ try:
 except ImportError:
     print("python-dotenv no está instalado, no se cargarán las variables de entorno, salvo que se usen en el .env.")
 
-DOMAINS = os.getenv("DOMAINS", "").split(";")
+DOMAINS = os.getenv("DOMAINS", "").split("|")
 TIMEOUT_REQUEST = int(os.getenv("TIMEOUT_REQUEST", 30))
 RECEPTORES = os.getenv("RECEPTORES", "").split(";")
 
