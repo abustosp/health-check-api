@@ -14,7 +14,11 @@ RECEPTORES = os.getenv("RECEPTORES", "").split(";")
 def check_health(domain):
     
     try:
+        print(f"Verificando {domain}...")
         response = requests.get(domain, timeout=TIMEOUT_REQUEST)
+        print(f"Respuesta de {domain}: {response.status_code}")
+        print(response.text)
+        print("--------------------------------")
         if response.status_code == 200:
             return True, f"{domain} está saludable."
         else:
@@ -23,6 +27,9 @@ def check_health(domain):
         return False, f"{domain} es inalcanzable. Error: {e}"
 
 def main():
+    
+    print("Iniciando verificación de salud de servicios...")
+    
     results = []
     for domain in DOMAINS:
         is_healthy, message = check_health(domain)
@@ -38,6 +45,9 @@ def main():
             
     else:
         print("Todos los servicios están saludables.")
+        
+    print("Verificación de salud de servicios completada.")
+    print("================================")
         
 if __name__ == "__main__":
     main()
