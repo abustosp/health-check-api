@@ -7,8 +7,12 @@ try:
 except ImportError:
     print("python-dotenv no está instalado, no se cargarán las variables de entorno, salvo que se usen en el .env.")
 
-DOMAINS = os.getenv("DOMAINS", "").split("|")
-TIMEOUT_REQUEST = float(os.getenv("TIMEOUT_REQUEST", 30))
+raw_domains = os.getenv("DOMAINS", "")
+for sep in ("|", ";", ",", "\r", "\n"):
+    raw_domains = raw_domains.replace(sep, "\n")
+DOMAINS = [d.strip() for d in raw_domains.splitlines() if d.strip()]
+
+TIMEOUT_REQUEST = float(os.getenv("TIMEOUT_REQUEST", "30"))
 RECEPTORES = os.getenv("RECEPTORES", "").split(";")
 
 def check_health(domain):
