@@ -1,20 +1,21 @@
 # Health Check API
 
-Script en Python para verificar endpoints de salud y notificar por correo si alguno falla.
+Script en Python para verificar endpoints HTTP de salud y enviar alertas por correo cuando alguno falla o es inalcanzable.
 
 ## Que hace
-- Lee una lista de URLs desde variables de entorno.
-- Hace un GET a cada URL con timeout configurable.
+- Lee URLs desde `DOMAINS`.
+- Hace un GET por URL con timeout configurable.
 - Considera saludable solo un HTTP 200.
-- Si hay fallos, envia un correo HTML a una lista de receptores.
+- Si hay fallos, envia un correo HTML a los receptores.
 
 ## Requisitos
 - Python 3.12+
-- Dependencias: `requests` (ver `requirements.txt`)
-- Opcional: `python-dotenv` si quieres cargar un archivo `.env` en local
+- Dependencia: `requests` (ver `requirements.txt`)
+- Opcional: `python-dotenv` para cargar `.env`
+- Acceso a un servidor SMTP
 
 ## Configuracion (variables de entorno)
-- `DOMAINS`: lista de URLs separadas por `|`, `;`, `,` o saltos de linea.
+- `DOMAINS`: URLs separadas por `|`, `;`, `,` o saltos de linea.
 - `TIMEOUT_REQUEST`: segundos de espera por request (default: `30`).
 - `RECEPTORES`: correos separados por `;`.
 - `SMTP_SERVER`: host SMTP.
@@ -22,29 +23,28 @@ Script en Python para verificar endpoints de salud y notificar por correo si alg
 - `SMTP_USER`: usuario SMTP.
 - `SMTP_PASSWORD`: password SMTP.
 - `SMTP_FROM_EMAIL`: remitente.
-- `TEMPLATE_PATH`: ruta al HTML de la plantilla.
+- `TEMPLATE_PATH`: ruta al HTML de la plantilla (ej. `./utils/templates/mail.html`).
 
 ## Ejecutar en local
-```bash
-pip install -r requirements.txt
-python main.py
-```
+1. `cp .env.example .env` y completa los valores.
+2. `pip install -r requirements.txt`
+3. `python main.py`
 
-Si usas `.env` en local, instala `python-dotenv`:
+Si queres cargar `.env` automaticamente:
 ```bash
 pip install python-dotenv
 ```
 
-## Ejecutar con Docker Compose
+## Ejecutar con Docker
 ```bash
 docker compose up --build
 ```
 
-El `compose.yaml` carga un `.env` y monta `./utils/templates` dentro del contenedor.
+`compose.yaml` carga `.env` y monta `./utils/templates` dentro del contenedor.
 
 ## Plantilla de correo
-- Plantilla por defecto: `utils/templates/mail.html`
-- Usa el placeholder `{{SERVICIOS}}` para inyectar la lista de fallos.
+- Archivo por defecto: `utils/templates/mail.html`
+- Placeholder requerido: `{{SERVICIOS}}`
 
 ## Ejemplo de `.env`
 ```env
@@ -56,7 +56,5 @@ SMTP_PORT=587
 SMTP_USER=usuario
 SMTP_PASSWORD=secreto
 SMTP_FROM_EMAIL=monitor@example.com
-TEMPLATE_PATH=/app/utils/templates/mail.html
+TEMPLATE_PATH=./utils/templates/mail.html
 ```
-
-Para ejecucion local puedes usar `TEMPLATE_PATH=./utils/templates/mail.html`.
